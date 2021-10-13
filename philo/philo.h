@@ -1,9 +1,9 @@
 #ifndef PHILO_H
 # define PHILO_H
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <pthread.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <pthread.h>
 # include <sys/time.h>
 
 typedef struct s_philo
@@ -27,10 +27,12 @@ typedef struct s_table {
 
 typedef struct s_all
 {
-    t_philo *philo;
-    t_table *table;
+	t_philo *philo;
+	t_table *table;
 	int		ph_count;
-	unsigned int	start;
+	// unsigned int	start;
+	struct timeval	*start;
+	struct timezone	*start_tz;
 	pthread_t undertaker;
 } t_all;
 

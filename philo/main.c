@@ -7,16 +7,11 @@ int find_errors(int argc)
 	return 1;//ADD
 }
 
-int add_philo()
-{
-
-}
-
-int init_philo(t_all *all,int argc, char **argv)
+int init_philo(t_all *all,char **argv)
 {
 	int i;
 	int len;
-	all->start = get_time(NULL);
+	// all->start = get_time(NULL);
 	len = ft_atoi(argv[1]);
 	all->ph_count = len;
 	all->table->forks = malloc(sizeof(pthread_mutex_t) * len);
@@ -63,16 +58,19 @@ int init_philo(t_all *all,int argc, char **argv)
 // {
 // }
 
-int birth(t_all *all)
+void birth(t_all *all)
 {
-	//start live (potoki sozd)po kolvo philo
-	//проверка живы ли филы gettimeofday
 	int i;
 
+	all->start = (struct timeval *)malloc(sizeof(struct timeval));
+	all->start_tz = (struct timezone *)malloc(sizeof(struct timezone));
+	// if (!all->start || !sll->start_tz)
+	// 	//erro
+	gettimeofday(all->start, all->start_tz);
 	i = 0;
 	while (i < all->ph_count)
 	{
-		pthread_create(&all->philo->thread,NULL,live,(void *) all);
+		pthread_create(&all->philo->thread,NULL,(void *)live,(void *) all);
 		pthread_detach(all->philo[i].thread);
 		i++;
 	}
@@ -87,7 +85,7 @@ int main(int argc, char **argv)
 
     if (find_errors(argc) != 1)
 		return 0;//error
-	if (init_philo(&all,argc,argv) != 1)
+	if (init_philo(&all,argv) != 1)
 		return 0;
 	// if(live() != 1)
 	// 	return 0;
