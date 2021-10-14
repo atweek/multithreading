@@ -11,10 +11,11 @@ int init_philo(t_all *all,char **argv)
 {
 	int i;
 	int len;
+
 	// all->start = get_time(NULL);
 	len = ft_atoi(argv[1]);
 	all->ph_count = len;
-	all->table->forks = malloc(sizeof(pthread_mutex_t) * len);
+	all->table->forks = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t) * len);
 	if (all->table->forks == NULL)
 		return 0;
 	i = 0;
@@ -23,14 +24,18 @@ int init_philo(t_all *all,char **argv)
 	all->philo = malloc(sizeof(t_philo) * len);
 	if (all->philo == NULL)
 		return 0;
+	i = 0;
 	while (i < len)
 	{
+		all->philo[i].all = all;
 		all->philo[i].id = i + 1;
+		// printf("\nhello filo %d\n",all->philo[i].id);
 		all->philo[i].time_dead = ft_atoi(argv[1]);
 		all->philo[i].time_eat = ft_atoi(argv[2]);
 		all->philo[i].time_sleep = ft_atoi(argv[3]);
 		all->philo[i].count_eat = ft_atoi(argv[4]);
 		all->philo[i].die = 0;
+		i ++;
 	}
 	i = 0;
 	while (i < len)
@@ -70,24 +75,28 @@ void birth(t_all *all)
 	i = 0;
 	while (i < all->ph_count)
 	{
-		pthread_create(&all->philo->thread,NULL,(void *)live,(void *) all);
-		pthread_detach(all->philo[i].thread);
+		printf("run %d\n",all->philo[i].id);
+		pthread_create(&all->philo[i].thread,NULL,(void *)live,(void *) all->philo[i]);
 		i++;
 	}
+	i = 0;
+	while (i < all->ph_count)
+		pthread_detach(all->philo[i++].thread);
 	ft_usleep(20);
 	// pthread_create(&all->undertaker,NULL,undertaker,(void *) &all);
-	
+	// цикл для прохода по филам и смотрю есть ли у них время и жизнь
 }
 
 int main(int argc, char **argv)
 {
 	t_all all;
-
+	all.table = malloc(sizeof(t_table));
     if (find_errors(argc) != 1)
 		return 0;//error
 	if (init_philo(&all,argv) != 1)
 		return 0;
-	// if(live() != 1)
+	birth(&all);
+	live(&all);
 	// 	return 0;
 	
 }

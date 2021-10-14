@@ -6,21 +6,6 @@
 # include <pthread.h>
 # include <sys/time.h>
 
-typedef struct s_philo
-{
-	pthread_t		thread;
-    unsigned int	id;
-	unsigned int	time_start;
-	unsigned int	time_dead;
-	unsigned int	time_eat;
-	unsigned int	count_eat;
-	unsigned int	time_sleep;
-	unsigned int	last_eat;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
-	int				die;
-} t_philo;
-
 typedef struct s_table {
     pthread_mutex_t *forks;
 } t_table;
@@ -36,6 +21,21 @@ typedef struct s_all
 	pthread_t undertaker;
 } t_all;
 
+typedef struct s_philo
+{
+	pthread_t		thread;
+    unsigned int	id;
+	unsigned int	time_start;
+	unsigned int	time_dead;
+	unsigned int	time_eat;
+	unsigned int	count_eat;
+	unsigned int	time_sleep;
+	unsigned int	last_eat;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
+	int				die;
+	t_all			*all;
+} t_philo;
 
 /*
 memset, printf, malloc, free, write,
@@ -57,6 +57,6 @@ pthread_mutex_unlock
 int		ft_atoi(const char *str);
 long	get_time(struct timeval *time);
 void	ft_usleep(unsigned int milliseconds);
-void	*live(t_all *all);
+void	*live(t_philo *philo);
 
 #endif

@@ -1,53 +1,53 @@
 
 #include "philo.h"
 
-void eating(t_philo *philo,t_all *all)
+void eating(t_philo *philo)
 {
 	pthread_mutex_lock(philo->left_fork);
-	if (philo->left_fork)
+	// if (philo->left_fork)
 		printf("%ld %d has taken a fork\n", 
-			get_time(all->start),philo->id);
+			get_time(philo->all->start),philo->id);
     pthread_mutex_lock(philo->right_fork);
-	if (philo->right_fork)
+	// if (philo->right_fork)
 		printf("%ld %d has taken a fork\n", 
-			get_time(all->start),philo->id);
-	if (philo->left_fork && philo->right_fork)
-	{
-		printf("%ld %d is eating\n",get_time(all->start),philo->id);
+			get_time(philo->all->start),philo->id);
+	// if (philo->left_fork && philo->right_fork)
+	// {
+		printf("%ld %d is eating\n",get_time(philo->all->start),philo->id);
 		philo->last_eat = get_time(NULL);
-	}
+	// }
 	ft_usleep(philo->time_eat);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->left_fork);
 
 }
 
-void sleeping(t_philo *philo,t_all *all)
+void sleeping(t_philo *philo)
 {
 	printf("%ld %d is sleeping\n", 
-			get_time(all->start),philo->id);
+			get_time(philo->all->start),philo->id);
 	ft_usleep(philo->time_sleep);
 }
 
-void thinking(t_philo *philo,t_all *all)
+void thinking(t_philo *philo)
 {
-	printf("%ld %d is thinking\n", get_time(all->start),philo->id);
+	printf("%ld %d is thinking\n", get_time(philo->all->start),philo->id);
 }
 
-void *live(t_all *all)
+void *live(t_philo *philo)
 {
-	if (all->philo->id % 2 == 0)
-		usleep(20);
-	while (all->philo->die == 0)
+	if (philo->id % 2 == 0)
+		usleep(50);
+	while (philo->die == 0)
 	{
-		if (all->philo->time_dead - all->philo->last_eat <= 0)
+		if (philo->time_dead > (get_time(NULL) - philo->last_eat))// в мэин
 		{
-			all->philo->die = 1;
+			philo->die = 1;
 			break ;
 		}
-		eating(all->philo,all);
-		sleeping(all->philo,all);
-		thinking(all->philo,all); 
+		eating(philo);
+		sleeping(philo);
+		thinking(philo); 
 	}
 	return (NULL);
 }
