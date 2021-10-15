@@ -7,7 +7,7 @@ int find_errors(int argc)
 	return 1;//ADD
 }
 
-int init_philo(t_all *all,char **argv)
+int init_philo(t_all *all,char **argv,int argc)
 {
 	int i;
 	int len;
@@ -27,28 +27,29 @@ int init_philo(t_all *all,char **argv)
 	i = 0;
 	while (i < len)
 	{
-		all->philo[i].all = all;
+		// all->philo[i].all = all;
 		all->philo[i].id = i + 1;
 		// printf("\nhello filo %d\n",all->philo[i].id);
-		all->philo[i].time_dead = ft_atoi(argv[1]);
-		all->philo[i].time_eat = ft_atoi(argv[2]);
-		all->philo[i].time_sleep = ft_atoi(argv[3]);
-		all->philo[i].count_eat = ft_atoi(argv[4]);
+		all->philo[i].time_dead = ft_atoi(argv[2]);
+		all->philo[i].time_eat = ft_atoi(argv[3]);
+		all->philo[i].time_sleep = ft_atoi(argv[4]);
+		if (argc > 5)
+			all->philo[i].count_eat = ft_atoi(argv[5]);
 		all->philo[i].die = 0;
 		i ++;
 	}
 	i = 0;
 	while (i < len)
 	{
-		if (i == 0)
+		if (i < len - 1)
 		{
-			all->philo[i].left_fork = &all->table->forks[len -1];
-			all->philo[i].right_fork = &all->table->forks[i];
+			all->philo[i].left_fork = &all->table->forks[i];
+			all->philo[i].right_fork = &all->table->forks[i + 1];
 		}
 		else
 		{
-			all->philo[i].left_fork = &all->table->forks[i-1];
-			all->philo[i].right_fork = &all->table->forks[i];
+			all->philo[i].left_fork = &all->table->forks[i];
+			all->philo[i].right_fork = &all->table->forks[0];
 		}
 		i++;
 	}
@@ -75,8 +76,9 @@ void birth(t_all *all)
 	i = 0;
 	while (i < all->ph_count)
 	{
-		printf("run %d\n",all->philo[i].id);
-		pthread_create(&all->philo[i].thread,NULL,(void *)live,(void *) all->philo[i]);
+		// printf("run %d\n",all->philo[i].id);
+		all->philo[i].start = all->start;
+		pthread_create(&all->philo[i].thread,NULL,(void *)live,(void *) &all->philo[i]);
 		i++;
 	}
 	i = 0;
@@ -90,13 +92,32 @@ void birth(t_all *all)
 int main(int argc, char **argv)
 {
 	t_all all;
+	int i;
+
 	all.table = malloc(sizeof(t_table));
     if (find_errors(argc) != 1)
 		return 0;//error
-	if (init_philo(&all,argv) != 1)
+	if (init_philo(&all,argv,argc) != 1)
 		return 0;
 	birth(&all);
-	live(&all);
-	// 	return 0;
+	// live(all.philo);
+	while (1)
+	{
+		i = 0;
+		while (i <= all.ph_count)
+		{
+			if (all.philo[i].time_dead < (all.philo[i].time_now - all.philo[i].last_eat))
+			{
+				printf("time_dead -->%d\nminus -->%ld\n",all.philo[i].time_dead,all.philo[i].time_now - all.philo[i].last_eat);
+				all.philo[i].die = 1;
+				printf("%ld %d died\n", all.philo[i].time_now,
+				all.philo[i].id);
+				return 0;
+			}
+			i++;
+		}
+		// i++;
+	}
+	
 	
 }

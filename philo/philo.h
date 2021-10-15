@@ -10,19 +10,10 @@ typedef struct s_table {
     pthread_mutex_t *forks;
 } t_table;
 
-typedef struct s_all
-{
-	t_philo *philo;
-	t_table *table;
-	int		ph_count;
-	// unsigned int	start;
-	struct timeval	*start;
-	struct timezone	*start_tz;
-	pthread_t undertaker;
-} t_all;
-
 typedef struct s_philo
 {
+	struct timeval	*start;
+	long int		time_now;
 	pthread_t		thread;
     unsigned int	id;
 	unsigned int	time_start;
@@ -34,8 +25,20 @@ typedef struct s_philo
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 	int				die;
-	t_all			*all;
+	// t_all			*all;
 } t_philo;
+typedef struct s_all
+{
+	t_philo *philo;
+	t_table *table;
+	int		ph_count;
+	// unsigned int	start;
+	struct timeval	*start;
+	struct timezone	*start_tz;
+	pthread_t undertaker;
+} t_all;
+
+
 
 /*
 memset, printf, malloc, free, write,
