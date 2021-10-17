@@ -13,13 +13,14 @@ typedef struct s_table {
 typedef struct s_philo
 {
 	struct timeval	*start;
-	long int		time_now;
+	// long int		time_now;
 	pthread_t		thread;
     unsigned int	id;
 	unsigned int	time_start;
 	unsigned int	time_dead;
 	unsigned int	time_eat;
 	unsigned int	count_eat;
+	int 			check_eat;
 	unsigned int	time_sleep;
 	unsigned int	last_eat;
 	pthread_mutex_t	*left_fork;
