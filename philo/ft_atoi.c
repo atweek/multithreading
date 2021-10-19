@@ -17,7 +17,12 @@ int	ft_isdigit(int c)
 static int	check_minus_max(unsigned long long num, int minus)
 {
 	if (num > 9223372036854775807)
-		return (minus ? 0 : -1);
+	{
+		if (minus)
+			return (0);
+		else
+			return (-1);
+	}
 	if (minus == 1)
 		num *= -1;
 	if (minus > 1)
@@ -35,7 +40,7 @@ static int	move(char *str)
 	return (i);
 }
 
-int			ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
 	int					i;
 	int					minus;
@@ -48,9 +53,11 @@ int			ft_atoi(const char *str)
 		if (str[i++] == '-')
 			minus++;
 	while (str[i] != '\0')
+	{
 		if (ft_isdigit((int)str[i]))
 			num = (num * 10) + (str[i++] - 48);
 		else
 			break ;
+	}
 	return (check_minus_max(num, minus));
 }
