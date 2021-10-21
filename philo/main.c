@@ -1,9 +1,22 @@
 #include "philo.h"
 
-int	find_errors(int argc)
+int	find_errors(int argc, char **argv)
 {
+	int i;
+	int j;
+
+	j = 0;
 	if (argc > 6 || argc < 5)
 		return (0);
+	i = 1;
+	while (i < argc)
+	{
+		while (argv[i][j])
+		if (ft_isdigit(argv[i][j++]) == 0)
+			return 0;
+		i++;
+	}
+	
 	return (1);
 }
 
@@ -61,6 +74,11 @@ void	init_philo(t_all *all, char **argv, int argc)
 
 int	free_exit(t_all *all)
 {
+	int i;
+
+	i = 0;
+	while (i < all->ph_count)
+		pthread_detach(all->philo[i++].thread);
 	free(all->table->forks);
 	free(all->philo);
 	free(all->start_tz);
@@ -69,18 +87,19 @@ int	free_exit(t_all *all)
 	return (0);
 }
 
-int	main(int argc, char **argv)
+int	main(int argc, char **argv)//every eat
 {
 	t_all	all;
 	int		i;
 
-	if (find_errors(argc) != 1)
+	if (find_errors(argc,argv) != 1)
 		return (0);
 	init_philo(&all, argv, argc);
 	birth(&all);
 	while (1)
 	{
 		i = -1;
+		ft_usleep(10);
 		while (++i < all.ph_count)
 		{
 			if (all.philo[i].count_eat <= 0 && all.philo[i].check_eat == 1)

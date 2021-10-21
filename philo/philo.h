@@ -41,4 +41,6 @@ long	get_time(struct timeval *time);
 void	ft_usleep(unsigned int milliseconds);
 void	*live(t_philo *philo);
 void	birth(t_all *all);
+int		ft_isdigit(int c);
+
 #endif

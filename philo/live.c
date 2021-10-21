@@ -16,9 +16,11 @@ void	birth(t_all *all)
 		i++;
 	}
 	i = 0;
-	while (i < all->ph_count)
-		pthread_detach(all->philo[i++].thread);
+	// while (i < all->ph_count)
+	// 	pthread_detach(all->philo[i++].thread);
 	ft_usleep(20);
+	// usleep(20);
+
 }
 
 void	eating(t_philo *philo)
@@ -31,8 +33,8 @@ void	eating(t_philo *philo)
 	philo->last_eat = get_time(philo->start);
 	philo->count_eat--;
 	ft_usleep(philo->time_eat);
-	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_unlock(philo->left_fork);
 }
 
 void	sleeping(t_philo *philo)
@@ -51,6 +53,7 @@ void	*live(t_philo *philo)
 {
 	if (philo->id % 2 != 0)
 		ft_usleep(20);
+		// usleep(20);
 	while (philo->die == 0)
 	{
 		eating(philo);
