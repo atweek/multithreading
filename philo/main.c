@@ -5,6 +5,8 @@ int	find_errors(int argc, char **argv)
 	int	i;
 	int	j;
 
+	if (ft_atoi(argv[1]) <= 0)
+		return (0);
 	j = 0;
 	if (argc > 6 || argc < 5)
 		return (0);
@@ -46,20 +48,18 @@ void	add_info(t_all *all, int len, char **argv, int argc)
 
 void	init_philo(t_all *all, char **argv, int argc)
 {
-	int	len;
 	int	i;
 
 	i = -1;
-	len = ft_atoi(argv[1]);
-	all->ph_count = len;
+	all->ph_count = ft_atoi(argv[1]);
 	all->table = malloc(sizeof(t_table));
 	all->table->forks = (pthread_mutex_t *)
-		malloc(sizeof(pthread_mutex_t) * len);
-	all->philo = malloc(sizeof(t_philo) * len);
-	add_info(all, len, argv, argc);
-	while (++i < len)
+		malloc(sizeof(pthread_mutex_t) * all->ph_count);
+	all->philo = malloc(sizeof(t_philo) * all->ph_count);
+	add_info(all, all->ph_count, argv, argc);
+	while (++i < all->ph_count)
 	{
-		if (i < len - 1)
+		if (i < all->ph_count - 1)
 		{
 			all->philo[i].left_fork = &all->table->forks[i];
 			all->philo[i].right_fork = &all->table->forks[i + 1];
