@@ -16,11 +16,7 @@ void	birth(t_all *all)
 		i++;
 	}
 	i = 0;
-	// while (i < all->ph_count)
-	// 	pthread_detach(all->philo[i++].thread);
 	ft_usleep(20);
-	// usleep(20);
-
 }
 
 void	eating(t_philo *philo)
@@ -53,7 +49,6 @@ void	*live(t_philo *philo)
 {
 	if (philo->id % 2 != 0)
 		ft_usleep(20);
-		// usleep(20);
 	while (philo->die == 0)
 	{
 		eating(philo);

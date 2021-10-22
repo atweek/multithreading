@@ -2,8 +2,8 @@
 
 int	find_errors(int argc, char **argv)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	j = 0;
 	if (argc > 6 || argc < 5)
@@ -12,12 +12,11 @@ int	find_errors(int argc, char **argv)
 	while (i < argc)
 	{
 		while (argv[i][j])
-		if (ft_isdigit(argv[i][j++]) == 0)
-			return 0;
+			if (ft_isdigit(argv[i][j++]) == 0)
+				return (0);
 		i++;
 		j = 0;
 	}
-	
 	return (1);
 }
 
@@ -73,47 +72,31 @@ void	init_philo(t_all *all, char **argv, int argc)
 	}
 }
 
-int	free_exit(t_all *all)
+int	count_eat(t_all *all)
 {
-	int i;
-
-	i = 0;
-	while (i < all->ph_count)
-		pthread_detach(all->philo[i++].thread);
-	free(all->table->forks);
-	free(all->philo);
-	free(all->start_tz);
-	free(all->start);
-	free(all->table);
-	return (0);
-}
-
-int count_eat(t_all *all)
-{
-	int i;
+	int	i;
 
 	i = 0;
 	if (all->check_eat == 1)
 	{
 		while (i < all->ph_count)
 		{
-			// printf("     %d\n",all->philo[i].count_eat);
 			if (all->philo[i].count_eat > 0)
-				return 1;
+				return (1);
 			i++;
 		}
 	}
 	else
-		return 1;
-	return 0;
+		return (1);
+	return (0);
 }
 
-int	main(int argc, char **argv)//every eat
+int	main(int argc, char **argv)
 {
 	t_all	all;
 	int		i;
 
-	if (find_errors(argc,argv) != 1)
+	if (find_errors(argc, argv) != 1)
 		return (0);
 	init_philo(&all, argv, argc);
 	birth(&all);
