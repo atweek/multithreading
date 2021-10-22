@@ -19,8 +19,7 @@ typedef struct s_philo
 	unsigned int	time_start;
 	unsigned int	time_dead;
 	unsigned int	time_eat;
-	unsigned int	count_eat;
-	int				check_eat;
+	int				count_eat;
 	unsigned int	time_sleep;
 	unsigned int	last_eat;
 	pthread_mutex_t	*left_fork;
@@ -33,6 +32,7 @@ typedef struct s_all
 	t_table			*table;
 	int				ph_count;
 	struct timeval	*start;
+	int				check_eat;
 	struct timezone	*start_tz;
 }	t_all;
 

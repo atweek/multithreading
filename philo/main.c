@@ -15,6 +15,7 @@ int	find_errors(int argc, char **argv)
 		if (ft_isdigit(argv[i][j++]) == 0)
 			return 0;
 		i++;
+		j = 0;
 	}
 	
 	return (1);
@@ -34,11 +35,11 @@ void	add_info(t_all *all, int len, char **argv, int argc)
 		all->philo[i].time_sleep = ft_atoi(argv[4]);
 		if (argc > 5)
 		{
-			all->philo[i].check_eat = 1;
+			all->check_eat = 1;
 			all->philo[i].count_eat = ft_atoi(argv[5]);
 		}
 		else
-			all->philo[i].check_eat = 0;
+			all->check_eat = 0;
 		all->philo[i].die = 0;
 		i++;
 	}
@@ -87,6 +88,26 @@ int	free_exit(t_all *all)
 	return (0);
 }
 
+int count_eat(t_all *all)
+{
+	int i;
+
+	i = 0;
+	if (all->check_eat == 1)
+	{
+		while (i < all->ph_count)
+		{
+			// printf("     %d\n",all->philo[i].count_eat);
+			if (all->philo[i].count_eat > 0)
+				return 1;
+			i++;
+		}
+	}
+	else
+		return 1;
+	return 0;
+}
+
 int	main(int argc, char **argv)//every eat
 {
 	t_all	all;
@@ -102,7 +123,7 @@ int	main(int argc, char **argv)//every eat
 		ft_usleep(10);
 		while (++i < all.ph_count)
 		{
-			if (all.philo[i].count_eat <= 0 && all.philo[i].check_eat == 1)
+			if (count_eat(&all) == 0)
 				return (free_exit(&all));
 			if (all.philo[i].time_dead < (get_time(all.philo[i].start)
 					- all.philo[i].last_eat))
